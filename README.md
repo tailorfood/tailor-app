@@ -2,8 +2,11 @@
 
 <p align="center">
 <a href='http://tailor.restaurant'><img src='images/tailor.png' height='200'></a>
-<br> tailor your food experience to a tee. <br>
 </p>
+
+## About
+
+Tailor is an app that unifies the food ordering and eating experience and tailors it to you. Gone are the days of spending hours deciding where to eat!
 
 ## Technology Stack
 
