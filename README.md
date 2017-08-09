@@ -1,5 +1,3 @@
-# tailor
-
 <p align="center">
 <a href='http://tailor.restaurant'><img src='images/tailor.png' height='200'></a>
 </p>
