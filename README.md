@@ -20,10 +20,13 @@ We use Pattern Recognition to detect your favourite bites to eat and reccomend n
 
 ## Supported APIs
 
-- [Yelp](https://www.yelp.com/developers/documentation/v3)
-- [Just Eat](http://public.je-apis.com/swagger-ui/)
-- [Uber](https://www.ubereats.com/) (when that happens)
-- [Foodora](https://foodora.ca) (when that happens)
+- [Yelp](https://www.yelp.com/developers/documentation/v3) (GLOBAL)
+- [Just Eat](http://public.je-apis.com/swagger-ui/) (CAN+)
+- [Uber](https://www.ubereats.com/) (when that happens) (USA+)
+- [Foodora](https://foodora.ca) (when that happens) (CAN/EU)
+- [Postmates](https://postmates.com/developer) (USA)
+- [Grubhub](https://github.com/rschmukler/grubhub-scraper) (USA)
+- [Doordash](https://doordash.com) (CAN+)
 
 ## Gameplan
 
