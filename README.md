@@ -20,18 +20,19 @@ We use Pattern Recognition to detect your favourite bites to eat and reccomend n
 
 ## Supported APIs
 
-- [Yelp](https://www.yelp.com/developers/documentation/v3) (GLOBAL)
-- [Just Eat](http://public.je-apis.com/swagger-ui/) (CAN+)
-- [Uber](https://www.ubereats.com/) (when that happens) (USA+)
-- [Foodora](https://foodora.ca) (when that happens) (CAN/EU)
-- [Postmates](https://postmates.com/developer) (USA)
-- [Grubhub](https://github.com/rschmukler/grubhub-scraper) (USA)
-- [Doordash](https://doordash.com) (CAN+)
+### Food
 
-## Gameplan
+- [Yelp](https://www.yelp.com/developers/documentation/v3) (GLOBAL) [API]
+- [Just Eat](http://public.je-apis.com/swagger-ui/) (CAN+) [API]
+- [Postmates](https://postmates.com/developer) (USA) [API]
+- [Grubhub](https://github.com/rschmukler/grubhub-scraper) (USA) [API]
+- [Uber](https://www.ubereats.com/) (when that happens) (USA+) [SCRAPE]
+- [Foodora](https://foodora.ca) (when that happens) (CAN/EU) [SCRAPE]
+- [Doordash](https://doordash.com) (CAN+) [SCRAPE]
 
-Since Uber and Foodora lack APIs i'm going to beautifulsoup the heck out of them and enter the address and scrape the restaurants via python. Uber will require text entry while foodora CAN use url manipulation, but is gross and i'll have to do some button pressing there. Buttons for ubereats and foodora will be disabled but show if exists while just eat will order :).
+### Other
 
+- [Google] (https://developers.google.com/places/web-service/details)
 
 <p align="center">
 <a href='http://jsquared.tech'><img src='images/jsquared.png' height='100'></a>
