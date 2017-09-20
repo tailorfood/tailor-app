@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text, Image, StyleSheet, Dimensions } from 'react-native'
+import { ScrollView, View, Text, Image, StyleSheet, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import TextField from 'react-native-md-textinput'
+import Button from '../General/Button'
 
 export default class SignIn extends Component {
     static navigationOptions = {
@@ -9,7 +10,7 @@ export default class SignIn extends Component {
     }
     render() {
         return(
-            <View style={styles.center}>
+            <ScrollView style={{backgroundColor: 'white'}} contentContainerStyle={styles.center}>
                 <View style={styles.container}>
                     <Image style={styles.logo} source={require('../../images/tailor.png')}/>
                     <Text>SIGN IN    </Text>
@@ -18,12 +19,16 @@ export default class SignIn extends Component {
                     <TextField label={'email'} highlightColor={'black'}/>
                     <TextField label={'password'} highlightColor={'black'}/>
                 </View>
-            </View>
+                <View style={styles.container}>
+                    <Button title={'SIGN IN'} onPress={() => null}/>
+                    <Button title={'SIGN IN WITH FACEBOOK'} onPress={() => null} facebook/>
+                </View>
+            </ScrollView>
         )
     }
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     center: {
         flex: 1,
         justifyContent: 'center',
