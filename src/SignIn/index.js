@@ -5,9 +5,8 @@ import TextField from 'react-native-md-textinput'
 
 export default class SignIn extends Component {
     static navigationOptions = {
-        
+        // header: ({ goBack }) => <Icon name={'chevron-left'} onPress={ () => { goBack() } }/> })
     }
-
     render() {
         return(
             <View style={styles.center}>
