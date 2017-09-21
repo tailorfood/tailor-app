@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 
 export default class Profile extends Component {
     static navigationOptions = {
-        title: 'Profile'
+        header: () => null
     }
 
     render() {

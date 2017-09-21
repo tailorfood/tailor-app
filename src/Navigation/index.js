@@ -8,7 +8,7 @@ import Explore from '../Explore'
 import Profile from '../Profile'
 
 import Splash from '../Splash'
-import SignIn from '../SignIn'
+//import SignIn from '../SignIn'
 import SignUp from '../SignUp'
 
 const navRoutes = {
@@ -19,7 +19,7 @@ const navRoutes = {
 
 const routes = {
     Splash: { screen: Splash },
-    SignIn: { screen: SignIn },
+    //SignIn: { screen: SignIn },
     SignUp: { screen: SignUp },
     Restaurant: { screen: () => null },
     Cuisine: { screen: () => null },

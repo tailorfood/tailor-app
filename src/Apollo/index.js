@@ -1,7 +1,9 @@
 import { ApolloClient, createNetworkInterface } from 'react-apollo'
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
 
-const network = createNetworkInterface({ uri: 'https://api.graph.cool/simple/v1/cj2ngyezgt0o80175f5vtlmcz' }).use([{
+const keys = require('../../keys.json')
+
+const network = createNetworkInterface({ uri: keys['GRAPHCOOL_URL'] }).use([{
     applyMiddleware(req, next) {
         AsyncStorage.getItem('token').then(token => {
             const auth = token ? `Bearer ${token}` : null
@@ -13,7 +15,7 @@ const network = createNetworkInterface({ uri: 'https://api.graph.cool/simple/v1/
 }])
 
 const subscriptions = new SubscriptionClient(
-    'wss://subscriptions.graph.cool/v1/cj2ngyezgt0o80175f5vtlmcz',
+    keys['GRAPHCOOL_SUBS'],
     { reconnect: true }
 )
 
