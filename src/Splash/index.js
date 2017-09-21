@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { View, Image, StyleSheet, Dimensions, AsyncStorage } from 'react-native'
 import Auth0 from 'react-native-auth0'
+import { NavigationActions } from 'react-navigation'
 
 import Button from '../General/Button'
 import Loading from '../General/Loading'
@@ -31,6 +32,21 @@ export default class Splash extends Component {
                 console.log(error)
                 this.setState({loading: false})
             })
+    }
+
+    componentWillMount() {
+        const resetAction = NavigationActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({ routeName: 'Home' })
+            ]
+        })
+        AsyncStorage.getItem('token').then((token) => {
+            if (token) {
+                this.props.navigation.dispatch(resetAction)
+                this.props.navigation.goBack(null)
+            }
+        })
     }
 
     render() {
