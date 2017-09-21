@@ -47,7 +47,7 @@ export default class Splash extends Component {
             }else {
                 this.setState({ visible: true })
             }
-        })
+        }).catch((err) => this.setState({ visible: true }))
     }
 
     render() {

@@ -45,6 +45,7 @@
     "react-native-google-places": "^2.4.2",
     "react-native-md-textinput": "^2.0.4",
     "react-native-progress": "^3.4.0",
+    "react-native-tab-view": "0.0.69",
     "react-native-vector-icons": "^4.4.0",
     "react-navigation": "^1.0.0-beta.11",
     "react-redux": "^5.0.6",
