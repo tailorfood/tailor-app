@@ -1,6 +1,6 @@
 // @f;pw
 import React, { Component } from 'react'
-import { View, Image, StyleSheet, Dimensions, AsyncStorage } from 'react-native'
+import { View, Text, Image, StyleSheet, Dimensions, AsyncStorage } from 'react-native'
 import Auth0 from 'react-native-auth0'
 import { NavigationActions } from 'react-navigation'
 
@@ -13,7 +13,7 @@ export default class Splash extends Component {
         header: () => null
     }
 
-    state = { loading: false }
+    state = { loading: false, visible: false }
 
     signInUser() {
         setTimeout(() => this.setState({loading: true}), 1000)
@@ -33,7 +33,6 @@ export default class Splash extends Component {
                 this.setState({loading: false})
             })
     }
-
     componentWillMount() {
         const resetAction = NavigationActions.reset({
             index: 0,
@@ -45,19 +44,21 @@ export default class Splash extends Component {
             if (token) {
                 this.props.navigation.dispatch(resetAction)
                 this.props.navigation.goBack(null)
+            }else {
+                this.setState({ visible: true })
             }
         })
     }
 
     render() {
-        return(
+        return this.state.visible ? (
             <View style={styles.center}>
                 <Image style={styles.logo} source={require('../../images/tailor.png')}/>
                 <Button title={'SIGN IN'} onPress={() => this.signInUser()}/>
                 <Button title={'SIGN UP'} onPress={() => this.props.navigation.navigate('SignUp')}/>
                 { this.state.loading && <Loading/> }
             </View>
-        )
+        ) : <View/>
     }
 }
 

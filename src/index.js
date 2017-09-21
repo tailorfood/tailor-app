@@ -1,6 +1,6 @@
 //@flow
 import React from 'react'
-import { View } from 'react-native'
+import { View, AsyncStorage } from 'react-native'
 import { ApolloProvider } from 'react-apollo'
 
 import client from './Apollo'
@@ -12,7 +12,7 @@ export default () => {
         <ApolloProvider client={ client }>
             <View style={{ flex: 1, backgroundColor: 'white' }}>
                 <Navigation/>
-                <NavBar/>
+                <NavBar visible={AsyncStorage.getItem('token')}/>
             </View>
         </ApolloProvider>
     )
