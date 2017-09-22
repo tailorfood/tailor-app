@@ -1,5 +1,6 @@
 import { ApolloClient, createNetworkInterface } from 'react-apollo'
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
+import { AsyncStorage } from 'react-native'
 
 const keys = require('../../keys.json')
 
@@ -8,7 +9,7 @@ const network = createNetworkInterface({ uri: keys['GRAPHCOOL_URL'] }).use([{
         AsyncStorage.getItem('token').then(token => {
             const auth = token ? `Bearer ${token}` : null
             req.options.headers = req.options.headers || {}
-            req.options.headers.authorization = authorization
+            req.options.headers.authorization = auth
             next()
         })
     }
