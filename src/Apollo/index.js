@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native'
 
 const keys = require('../../keys.json')
 
-const network = createNetworkInterface({ uri: keys['GRAPHCOOL_URL'] }).use([{
+const network = createNetworkInterface({ uri: keys.GRAPHCOOL_URL }).use([{
     applyMiddleware(req, next) {
         AsyncStorage.getItem('token').then(token => {
             const auth = token ? `Bearer ${token}` : null
@@ -16,7 +16,7 @@ const network = createNetworkInterface({ uri: keys['GRAPHCOOL_URL'] }).use([{
 }])
 
 const subscriptions = new SubscriptionClient(
-    keys['GRAPHCOOL_SUBS'],
+    keys.GRAPHCOOL_SUBS,
     { reconnect: true }
 )
 

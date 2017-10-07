@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
-import { View, Text, AsyncStorage } from 'react-native'
+import { 
+    View, 
+    Text, 
+    ScrollView,
+    FlatList 
+} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import Button from '../General/Button'
+import ListItem from '../ListItem'
+
+const fakeData = require('./fake_data.json')
 
 //should be a tabview
 export default class Home extends Component {
@@ -9,17 +16,26 @@ export default class Home extends Component {
         header: () => null
     }
 
+    dropDown = () => {
+        console.log('dropdown!')
+    }
+
     render() {
-        return(
+        return (
             <View style={{flex: 1, backgroundColor: 'white'}}>
-                <View style={{height: 90, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={{color: 'gray', paddingHorizontal: 10, fontSize: 13}}>123 ADDRESS ST.</Text>
-                    <Icon name={'ios-arrow-down'} size={12} color={'gray'}/>
+                <View style={{height: 70, width: '100%', flexDirection: 'row', justifyContent: 'center'}}>
+                    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', position: 'absolute', bottom: 20}}>
+                        <Text style={{color: 'gray', paddingHorizontal: 10, fontSize: 13, backgroundColor: 'transparent'}}>123 ADDRESS ST.</Text>
+                        <Icon name={'ios-arrow-down'} size={12} color={'gray'} style={{backgroundColor: 'transparent'}} onPress={() => this.dropDown()}/>
+                    </View>
                 </View>
-                <Button title={'LOG OUT'} onPress={() => {
-                    AsyncStorage.removeItem('token')
-                    this.props.navigation.navigate('Splash')
-                }} />
+                <ScrollView>
+                    <FlatList 
+                        data={fakeData.recommendations}
+                        keyExtractor={(item, index) => index}
+                        renderItem={({item}, index) => <ListItem {...item} imageUri={`file:///Users/jacoberickson1/Desktop/tailor/images/${item.imageUri}`}/>}
+                    />
+                </ScrollView>
             </View>
         )
     }

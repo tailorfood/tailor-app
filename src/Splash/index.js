@@ -1,6 +1,6 @@
 // @f;pw
 import React, { Component } from 'react'
-import { View, Text, Image, StyleSheet, Dimensions, AsyncStorage } from 'react-native'
+import { View, Image, StyleSheet, Dimensions, AsyncStorage } from 'react-native'
 import Auth0 from 'react-native-auth0'
 import { NavigationActions } from 'react-navigation'
 
@@ -44,8 +44,11 @@ export default class Splash extends Component {
             if (token) {
                 this.props.navigation.dispatch(resetAction)
                 this.props.navigation.goBack(null)
-            }else {
-                this.setState({ visible: true })
+            } else {
+                // invert comments on these to work in offline mode
+                __DEV__ && this.props.navigation.dispatch(resetAction)
+                __DEV__ && this.props.navigation.goBack(null)
+                !__DEV__ && this.setState({ visible: true })
             }
         }).catch((err) => this.setState({ visible: true }))
     }
