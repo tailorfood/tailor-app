@@ -12,11 +12,6 @@ We use Pattern Recognition to detect your favourite bites to eat and reccomend n
 
 - React Native
 - GraphQL
-- NodeJS
-- ExpressJS
-- MongoDB
-- DigitalOcean
-- mLab
 
 ## Supported APIs
 
