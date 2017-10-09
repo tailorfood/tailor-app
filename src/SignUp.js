@@ -13,7 +13,7 @@ import RNGooglePlaces from 'react-native-google-places';
 import TextField from 'react-native-md-textinput'
 import Auth0 from 'react-native-auth0'
 
-import Button from '../General/Button'
+import { Button } from './General'
 
 export default class SignUp extends Component {
     static navigationOptions = {
@@ -39,7 +39,7 @@ export default class SignUp extends Component {
     }
 
     createUser() {
-        const keys = require('../../keys.json')
+        const keys = require('../keys.json')
         const auth0 = new Auth0({ domain: keys['AUTH_DOMAIN'], clientId: keys['AUTH_ID'] })
         auth0.auth
             .createUser({email: this.state.email, username: this.state.username, password: this.state.password, connection: 'Username-Password-Authentication'})
@@ -62,7 +62,7 @@ export default class SignUp extends Component {
             <KeyboardAvoidingView style={{backgroundColor: 'white', flex: 1}}>
                 <ScrollView style={{backgroundColor: 'white'}} contentContainerStyle={styles.center}>
                     <View style={[styles.container, {marginTop: 40}]}>
-                        <Image style={styles.logo} source={require('../../images/tailor.png')}/>
+                        <Image style={styles.logo} source={require('../images/tailor.png')}/>
                         <Text>SIGN UP    </Text>
                     </View>
                     <View style={{ padding: 20, paddingHorizontal: 40 }}>

@@ -37,7 +37,7 @@ export default class Splash extends Component {
         const resetAction = NavigationActions.reset({
             index: 0,
             actions: [
-                NavigationActions.navigate({ routeName: 'Home' })
+                NavigationActions.navigate({ routeName: 'Main' })
             ]
         })
         AsyncStorage.getItem('token').then((token) => {
@@ -46,9 +46,9 @@ export default class Splash extends Component {
                 this.props.navigation.goBack(null)
             } else {
                 // invert comments on these to work in offline mode
-                // __DEV__ && this.props.navigation.dispatch(resetAction)
-                // __DEV__ && this.props.navigation.goBack(null)
-                this.setState({ visible: true })
+                __DEV__ && this.props.navigation.dispatch(resetAction)
+                __DEV__ && this.props.navigation.goBack(null)
+                // this.setState({ visible: true })
             }
         }).catch((err) => this.setState({ visible: true }))
     }

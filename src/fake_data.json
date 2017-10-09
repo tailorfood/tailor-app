@@ -1,0 +1,208 @@
+{
+    "profile": {
+        "name": "John Smith",
+        "address": "20 Richmond St.",
+        "avatarUri": "",
+        "restaurants": [
+            {   
+                "rID": 1,
+                "title": "Pai Northern Kitchen",
+                "address": "123 Bla Bla",
+                "cuisine": "Thai",
+                "stars": 5,
+                "like": true
+            },
+            {
+                "rID": 2,
+                "title": "Momofuku Noodle Bar",
+                "address": "123 Bla Bla",
+                "cuisine": "Ramen",
+                "stars": 2,
+                "like": false
+            },
+            {
+                "rID": 3,
+                "title": "McDonald's",
+                "address": "123 Bla Bla",
+                "cuisine": "Burgers",
+                "stars": 3,
+                "like": true
+            },
+            {
+                "rID": 4,
+                "title": "Coco Rice Thai",
+                "address": "123 Bla Bla",
+                "cuisine": "Thai",
+                "stars": 4,
+                "like": true
+            }
+        ]
+    },
+    "recommendations": [
+        {
+            "title": "porchetta and co.",
+            "address": "120 King St.",
+            "stars": 5,
+            "imageUri": "burger.jpg",
+            "cuisine": "American",
+        },
+        {
+            "title": "katana",
+            "address": "240 Bay St.",
+            "stars": 4,
+            "imageUri": "sushi1.png",
+            "cuisine": "Japanese",
+        },
+        {
+            "title": "japango",
+            "address": "12 John St.",
+            "stars": 3,
+            "imageUri": "katana.jpg",
+            "cuisine": "Japanese",
+        }
+    ],
+    "popular": [
+        {
+            "title": "mcdonald's",
+            "address": "12 Bay St.",
+            "stars": 3,
+            "imageUri": "mcd.png",
+            "cuisine": "Burgers",
+        },
+        {
+            "title": "sweet jesus",
+            "address": "20 john st.",
+            "stars": 4,
+            "imageUri": "icecream.jpg",
+            "cuisine": "Dessert",
+        },
+        {
+            "title": "fushimi",
+            "address": "12 Yonge St.",
+            "stars": 3,
+            "imageUri": "sushi2.jpg",
+            "cuisine": "Japanese",
+        },
+        {
+            "title": "pai northern kitchen",
+            "address": "40 John St.",
+            "stars": 5,
+            "imageUri": "pai.jpg",
+            "cuisine": "Thai",
+        }
+    ],
+    "explore": [
+        {
+            "title": "mcdonald's",
+            "address": "12 Bay St.",
+            "stars": 3,
+            "imageUri": "mcd.png",
+            "cuisine": "Burgers",
+        },
+        {
+            "title": "sweet jesus",
+            "address": "20 john st.",
+            "stars": 4,
+            "imageUri": "icecream.jpg",
+            "cuisine": "Dessert",
+        },
+        {
+            "title": "fushimi",
+            "address": "12 Yonge St.",
+            "stars": 3,
+            "imageUri": "sushi2.jpg",
+            "cuisine": "Japanese",
+        },
+        {
+            "title": "pai northern kitchen",
+            "address": "40 John St.",
+            "stars": 5,
+            "imageUri": "pai.jpg",
+            "cuisine": "Thai",
+        },
+        {
+            "title": "random search restaurant 1",
+            "address": "12 Bay St.",
+            "stars": 3,
+            "imageUri": "mcd.png",
+            "cuisine": "American",
+        },
+        {
+            "title": "rs2",
+            "address": "20 john st.",
+            "stars": 4,
+            "imageUri": "icecream.jpg",
+            "cuisine": "Canadian",
+        },
+        {
+            "title": "rs3",
+            "address": "12 Yonge St.",
+            "stars": 3,
+            "imageUri": "sushi2.jpg",
+            "cuisine": "Asian Fusion",
+        },
+        {
+            "title": "rs4",
+            "address": "40 John St.",
+            "stars": 5,
+            "imageUri": "pai.jpg",
+            "cuisine": "Chinese",
+        },
+        {
+            "title": "rs5",
+            "address": "12 Bay St.",
+            "stars": 3,
+            "imageUri": "mcd.png",
+            "cuisine": "Thai",
+        },
+        {
+            "title": "rs6",
+            "address": "20 john st.",
+            "stars": 4,
+            "imageUri": "icecream.jpg",
+            "cuisine": "Poutine",
+        },
+        {
+            "title": "rs7",
+            "address": "12 Yonge St.",
+            "stars": 3,
+            "imageUri": "sushi2.jpg",
+            "cuisine": "Fries",
+        },
+        {
+            "title": "rs8",
+            "address": "40 John St.",
+            "stars": 5,
+            "imageUri": "pai.jpg",
+            "cuisine": "Lol",
+        },
+        {
+            "title": "rs9",
+            "address": "12 Bay St.",
+            "stars": 3,
+            "imageUri": "mcd.png",
+            "cuisine": "Burgers",
+        },
+        {
+            "title": "rs10",
+            "address": "20 john st.",
+            "stars": 4,
+            "imageUri": "icecream.jpg",
+            "cuisine": "Random",
+        },
+        {
+            "title": "rs11",
+            "address": "12 Yonge St.",
+            "stars": 3,
+            "imageUri": "sushi2.jpg",
+            "cuisine": "Japanese",
+        },
+        {
+            "title": "rs12",
+            "address": "40 John St.",
+            "stars": 5,
+            "imageUri": "pai.jpg",
+            "cuisine": "Thai",
+        }
+    ]
+}

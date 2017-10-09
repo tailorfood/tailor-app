@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, AsyncStorage } from 'react-native'
-import Button from '../General/Button'
+import { ScrollView, View,  AsyncStorage } from 'react-native'
+import { Button } from '../General'
+import ProfileHeader from './ProfileHeader'
+
+const fakeData = require('../fake_data.json')
 
 export default class Profile extends Component {
     static navigationOptions = {
@@ -8,14 +11,16 @@ export default class Profile extends Component {
     }
 
     render() {
-        return(
-            <View>
-                <Text>profile</Text>
-                <Button title={'LOG OUT'} onPress={() => {
-                    AsyncStorage.removeItem('token')
-                    this.props.navigation.navigate('Splash')
-                }} />
-            </View>
+        return (
+            <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
+                <ProfileHeader {...fakeData.profile}/>
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                    <Button title={'LOG OUT'} onPress={() => {
+                        AsyncStorage.removeItem('token')
+                        this.props.navigation.navigate('Splash')
+                    }} />
+                </View>
+            </ScrollView>
         )
     }
 }

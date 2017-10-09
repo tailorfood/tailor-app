@@ -1,7 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, Text, Dimensions, StyleSheet } from 'react-native'
 
-export default ({ title, onPress, facebook }) => {
+export const Button = ({ title, onPress, facebook }) => {
     return (
         <TouchableOpacity onPress={onPress} style={{
             height: 48,

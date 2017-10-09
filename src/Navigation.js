@@ -3,18 +3,20 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addNavigationHelpers, StackNavigator } from 'react-navigation'
 
-import Home from '../Home'
-import Explore from '../Explore'
-import Profile from '../Profile'
+import Home from './Home'
+import Explore from './Explore'
+import Profile from './Profile'
+import Main from './Main'
 
-import Splash from '../Splash'
+import Splash from './Splash'
 //import SignIn from '../SignIn'
-import SignUp from '../SignUp'
+import SignUp from './SignUp'
 
 const navRoutes = {
     Home: { screen: Home },
     Explore: { screen: Explore },
-    Profile: { screen: Profile }
+    Profile: { screen: Profile },
+    Main: { screen: Main },
 }
 
 const routes = {

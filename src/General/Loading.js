@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react'
 import { View, Platform, ActivityIndicator } from 'react-native'
 import * as Progress from 'react-native-progress'
 
-export default class Loading extends PureComponent {
+export class Loading extends PureComponent {
     static defaultProps = {
         color: 'white',
         style: {},

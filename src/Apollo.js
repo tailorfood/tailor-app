@@ -2,7 +2,7 @@ import { ApolloClient, createNetworkInterface } from 'react-apollo'
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
 import { AsyncStorage } from 'react-native'
 
-const keys = require('../../keys.json')
+const keys = require('../keys.json')
 
 const network = createNetworkInterface({ uri: keys.GRAPHCOOL_URL }).use([{
     applyMiddleware(req, next) {
