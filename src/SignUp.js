@@ -41,7 +41,7 @@ export default class SignUp extends Component {
 
     createUser() {
         const keys = require('../keys.json')
-        const auth0 = new Auth0({ domain: keys['AUTH_DOMAIN'], clientId: keys['AUTH_ID'] })
+        const auth0 = new Auth0({ domain: keys.AUTH_DOMAIN, clientId: keys.AUTH_ID })
         auth0.auth
             .createUser({email: this.state.email, username: this.state.username, password: this.state.password, connection: 'Username-Password-Authentication'})
             .then((newUser) => {
@@ -49,8 +49,31 @@ export default class SignUp extends Component {
                 console.log(newUser)
                 const token = newUser.tokenType + ' ' + newUser.idToken
                 AsyncStorage.setItem('token', token)
-                //new user stuff, create apollo, set token to sign in
+
                 this.props.navigation.navigate('Home')
+
+                AsyncStorage.getItem('yelp_token').then((result) => {
+                    if (result) {
+                        console.log('token already exists')
+                    } else {
+                        const formData = new FormData()
+                        formData.append("grant_type", "client_credentials")
+                        formData.append('client_id', keys.YELP_ID)
+                        formData.append('client_secret', keys.YELP_SECRET)
+                        fetch(
+                        'https://api.yelp.com/oauth2/token', {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: formData
+                        }).then(res => res.json())
+                        .then(res => {
+                            AsyncStorage.setItem('yelp_token', res.access_token)
+                        })
+                    }
+                }).catch(err => console.warn(err))
             })
             .catch((err) => { 
                 const errText = err.toString()
