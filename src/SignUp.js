@@ -6,7 +6,8 @@ import {
     Text, 
     Image, 
     StyleSheet, 
-    TouchableOpacity 
+    TouchableOpacity,
+    AsyncStorage
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import RNGooglePlaces from 'react-native-google-places';
@@ -46,6 +47,8 @@ export default class SignUp extends Component {
             .then((newUser) => {
                 //newUser: {id: str, emailVerified: bool, email: str}
                 console.log(newUser)
+                const token = newUser.tokenType + ' ' + newUser.idToken
+                AsyncStorage.setItem('token', token)
                 //new user stuff, create apollo, set token to sign in
                 this.props.navigation.navigate('Home')
             })

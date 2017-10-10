@@ -15,9 +15,9 @@ export default class Main extends Component {
                 this.props.navigation.state.params && 
                 this.props.navigation.state.params.index || 0
             }>
-                <Home />
-                <Explore />
-                <Profile />
+                <Home navigation={this.props.navigation}/>
+                <Explore navigation={this.props.navigation}/>
+                <Profile navigation={this.props.navigation}/>
             </Container>
         )
     }

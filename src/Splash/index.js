@@ -4,8 +4,7 @@ import { View, Image, StyleSheet, Dimensions, AsyncStorage } from 'react-native'
 import Auth0 from 'react-native-auth0'
 import { NavigationActions } from 'react-navigation'
 
-import Button from '../General/Button'
-import Loading from '../General/Loading'
+import { Button, Loading } from '../General'
 
 export default class Splash extends Component {
     static navigationOptions = {
@@ -46,9 +45,9 @@ export default class Splash extends Component {
                 this.props.navigation.goBack(null)
             } else {
                 // invert comments on these to work in offline mode
-                __DEV__ && this.props.navigation.dispatch(resetAction)
-                __DEV__ && this.props.navigation.goBack(null)
-                // this.setState({ visible: true })
+                // __DEV__ && this.props.navigation.dispatch(resetAction)
+                // __DEV__ && this.props.navigation.goBack(null)
+                this.setState({ visible: true })
             }
         }).catch((err) => this.setState({ visible: true }))
     }
