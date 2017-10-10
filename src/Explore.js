@@ -6,6 +6,8 @@ import { SquareItem } from './ListItem'
 const fakeData = require('./fake_data.json')
 const keys = require('../keys.json')
 
+import { createApolloFetch } from 'apollo-fetch'
+
 export default class Explore extends Component {
     static navigationOptions = {
         header: () => null
@@ -41,31 +43,40 @@ export default class Explore extends Component {
         }).catch(err => console.warn(err))
     }
 
-    queryYelp = (query) => this.state.ACCESS_TOKEN ? fetch(
-        'https://api.yelp.com/v3/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/graphql',
-                'Authorization': `Bearer ${this.state.ACCESS_TOKEN}`
-            },
-            body: query
-        })
-        .then((response) => console.log(response))
-        : console.log("querying with no token")
+    queryYelp = (query) => {
+        if (this.state.ACCESS_TOKEN) {
+            const uri = 'https://api.yelp.com/v3/graphql'
+
+            const apolloFetch = createApolloFetch({ uri })
+
+            apolloFetch.use(({ request, options }, next) => {
+                if (!options.headers) {
+                    options.headers = {
+                        'Accept-Language': 'en_CA'
+                    } 
+                }
+                options.headers.Authorization = `Bearer ${this.state.ACCESS_TOKEN}`
+
+                next()
+            })
+
+            apolloFetch({ query }).then((res) => console.log(res))
+        }
+    }
 
     render() {
         console.log(this.state.ACCESS_TOKEN)
-        // this.queryYelp(`
-        //     {
-        //         search(term: "burrito", location: "san francisco", limit: 5) {
-        //             total
-        //             business {
-        //                 name
-        //                 url
-        //             }
-        //         }
-        //     }
-        // `)
+        this.queryYelp(`
+            query {
+                search(term: "burrito", location: "san francisco", limit: 5) {
+                    total
+                    business {
+                        name
+                        url
+                    }
+                }
+            }
+        `)
         return (
             <View>
                 <View style={{height: 21, backgroundColor: 'white'}}/>
