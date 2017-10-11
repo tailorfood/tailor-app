@@ -6,7 +6,7 @@
 
 Tailor is an app that unifies the food ordering and eating experience and tailors it to you. Gone are the days of spending hours deciding where to eat!
 
-We use Pattern Recognition to detect your favourite bites to eat and reccomend new places, or old places to go to, or order straight from the app if available.
+We use Linear Regression with Matrix Factoriation to detect your favourite bites to eat and reccomend new places, or old places to go to, or order straight from the app if available.
 
 ## Technology Stack
 
