@@ -1,8 +1,8 @@
 # OSX
 #
+yarn.lock
 ios/Pods/
 ios/Podfile.lock
-ios/tailor.xcworkspace
 .DS_Store
 keys.json
 package-lock.json
