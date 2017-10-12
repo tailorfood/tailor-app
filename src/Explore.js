@@ -1,12 +1,22 @@
 import React, { Component } from 'react'
-import { Text, View, FlatList, ScrollView, AsyncStorage } from 'react-native'
+import { 
+    Text, 
+    View, 
+    FlatList, 
+    ScrollView, 
+    AsyncStorage, 
+} from 'react-native'
 import TextField from 'react-native-md-textinput'
+import { createApolloFetch } from 'apollo-fetch'
+
 import { SquareItem } from './ListItem'
+import { Loading } from './General'
 
 const fakeData = require('./fake_data.json')
 const keys = require('../keys.json')
 
-import { createApolloFetch } from 'apollo-fetch'
+const uri = 'https://api.yelp.com/v3/graphql'
+const apolloFetch = createApolloFetch({ uri })
 
 export default class Explore extends Component {
     static navigationOptions = {
@@ -14,13 +24,16 @@ export default class Explore extends Component {
     }
 
     state = {
-        search: ''
+        search: '',
+        searchData: [],
+        statusHeight: 21,
     }
 
     componentWillMount() {
         AsyncStorage.getItem('yelp_token').then(token => {
             if (token) {
                 this.setState({ACCESS_TOKEN : token})
+                this.searchYelp('').then((res) => res && res.search && res.search.business && this.setState({searchData: res.search.business}))
             } else {
                 const formData = new FormData()
                 formData.append("grant_type", "client_credentials")
@@ -38,69 +51,112 @@ export default class Explore extends Component {
                 .then(res => {
                     AsyncStorage.setItem('yelp_token', res.access_token)
                     this.setState({ACCESS_TOKEN: res.access_token})
+                    .then(() => this.searchYelp('').then((search_res) => 
+                        search_res && 
+                        search_res.search && 
+                        search_res.search.business && 
+                        this.setState({searchData: res.search.business})))
                 })
             }
         }).catch(err => console.warn(err))
     }
 
-    queryYelp = (query) => {
-        if (this.state.ACCESS_TOKEN) {
-            const uri = 'https://api.yelp.com/v3/graphql'
-
-            const apolloFetch = createApolloFetch({ uri })
-
+    componentWillUpdate(nextProps, nextState) {
+        if (nextState.ACCESS_TOKEN) {
             apolloFetch.use(({ request, options }, next) => {
                 if (!options.headers) {
                     options.headers = {
                         'Accept-Language': 'en_CA'
                     } 
                 }
-                options.headers.Authorization = `Bearer ${this.state.ACCESS_TOKEN}`
+                options.headers.Authorization = `Bearer ${nextState.ACCESS_TOKEN}`
 
                 next()
             })
-
-            apolloFetch({ query }).then((res) => console.log(res))
         }
     }
 
-    render() {
-        console.log(this.state.ACCESS_TOKEN)
-        this.queryYelp(`
-            query {
-                search(term: "burrito", location: "san francisco", limit: 5) {
-                    total
-                    business {
-                        name
-                        url
+    queryYelp = (query) => {
+        return apolloFetch({ query }).then(({data}) => data)
+    }
+
+    onTextChange = (text) => {
+        this.setState({search: text})
+        // https://www.yelp.com/developers/graphql/objects/business
+        this.searchYelp(text).then((res) => 
+            res && 
+            res.search && 
+            res.search.business && 
+            this.setState({searchData: res.search.business}))
+    }
+
+    searchYelp = (text) => this.queryYelp(`
+        query {
+            search(term: "${text}", location: "${fakeData.profile.address}", categories: "(food, All)", limit: 20) {
+                total
+                business {
+                    name
+                    location {
+                        address1
                     }
+                    rating
+                    url
+                    categories {
+                        title
+                    }
+                    hours {
+                        hours_type
+                        open {
+                            is_overnight
+                            start
+                            end
+                            day
+                        }
+                        is_open_now
+                    }
+                    price
+                    photos
                 }
             }
-        `)
+        }
+    `)
+    
+    render() {
         return (
-            <View>
-                <View style={{height: 21, backgroundColor: 'white'}}/>
-                <ScrollView style={{backgroundColor: 'white'}}>
-                    <View style={{height: 20, alignItems: 'center', justifyContent: 'center', padding: 20, paddingBottom: 5}}>
-                        <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.8)', }}>EXPLORE</Text>
-                    </View>
-                    <View style={{paddingHorizontal: 20, paddingBottom: 20}}>
-                        <TextField 
-                            label={'search for cuisines or restaurants'} 
-                            onChangeText={(text) => this.setState({search: text})} 
-                            value={this.state.search} 
-                            autoCorrect={false} 
-                            highlightColor={'black'} 
-                        />
-                    </View>
-                    <FlatList 
-                        data={fakeData.explore}
-                        numColumns={3}
-                        scrollable={false}
-                        keyExtractor={(item, index) => index}
-                        renderItem={({item}, index) => <SquareItem {...item} subtitle={item.address} imageUri={`file:///Users/jacoberickson1/Desktop/tailor/images/${item.imageUri}`}/>}
-                    />
-                </ScrollView>
+            <View style={{backgroundColor: 'white', flex: 1}}>
+                <View style={{height: 70, alignItems: 'center', justifyContent: 'center', padding: 20, paddingBottom: 5}}>
+                    <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.8)', }}>EXPLORE</Text>
+                </View>
+                {
+                    this.state.searchData.length > 0 ? (
+                        <ScrollView style={{backgroundColor: 'white'}}>
+                            <View style={{marginTop: -10, paddingHorizontal: 20, paddingBottom: 20}}>
+                                <TextField 
+                                    label={'search for cuisines or restaurants'} 
+                                    onChangeText={this.onTextChange} 
+                                    value={this.state.search} 
+                                    autoCorrect={false} 
+                                    highlightColor={'black'} 
+                                />
+                            </View>
+                            <FlatList 
+                                data={this.state.searchData}
+                                numColumns={3}
+                                scrollable={false}
+                                keyExtractor={(item, index) => index}
+                                renderItem={({item}, index) => <SquareItem
+                                    title={item.name}
+                                    subtitle={item.location.address1}
+                                    stars={item.rating}
+                                    imageUri={item.photos[0]}
+                                    onPress={(item) => null} //navigate
+                                />}
+                            />
+                        </ScrollView>
+                    ) : (
+                        <Loading />
+                    )
+                }
             </View>
         )
     }

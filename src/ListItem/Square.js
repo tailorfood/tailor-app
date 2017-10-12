@@ -7,15 +7,19 @@ import {
     StyleSheet,
     Dimensions
 } from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons'
 
-export const SquareItem = ({title, subtitle, stars, imageUri, onPress}) => {
+export const SquareItem = ({title, stars, imageUri, onPress}) => {
     return (
         <TouchableOpacity onPress={onPress} style={styles.button}>
             <Image source={{uri: imageUri}} style={styles.image} blurRadius={10}/>
             <View style={styles.overlay}/>
 
-            <Text style={styles.title}>{title.toUpperCase().substring(0, 26)}</Text>
-            <Text style={styles.subtitle}>{subtitle.toUpperCase()}</Text>
+            <Text style={styles.title}>{title && title.toUpperCase().substring(0, 26) || ''}</Text>
+            <View style={styles.starcontainer}>
+                <Icon name={'ios-star'} size={18} color={'white'} style={{backgroundColor: 'transparent'}}/>
+                <Text style={styles.subtitle}>{stars}</Text>
+            </View>
         </TouchableOpacity>
     )
 }
@@ -55,5 +59,11 @@ const styles = StyleSheet.create({
     stars: {
         position: 'absolute',
         bottom: 22,
+    },
+    starcontainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 2,
     }
 })
