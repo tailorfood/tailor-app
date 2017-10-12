@@ -12,11 +12,13 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons'
 import RNGooglePlaces from 'react-native-google-places';
 import TextField from 'react-native-md-textinput'
-import Auth0 from 'react-native-auth0'
+import { gql, graphql, compose } from 'react-apollo'
+import { NavigationActions } from 'react-navigation'
 
-import { Button } from './General'
+import { Button, Loading } from './General'
+const keys = require('../keys.json')
 
-export default class SignUp extends Component {
+class SignUp extends Component {
     static navigationOptions = {
         header: () => null
     }
@@ -26,7 +28,6 @@ export default class SignUp extends Component {
         password: '',
         address: '',
         username: '',
-        name: '',
         err: '',
     }
 
@@ -40,20 +41,25 @@ export default class SignUp extends Component {
     }
 
     createUser() {
-        const keys = require('../keys.json')
-        const auth0 = new Auth0({ domain: keys.AUTH_DOMAIN, clientId: keys.AUTH_ID })
-        auth0.auth
-            .createUser({email: this.state.email, username: this.state.username, password: this.state.password, connection: 'Username-Password-Authentication'})
-            .then((newUser) => {
-                //newUser: {id: str, emailVerified: bool, email: str}
-                console.log(newUser)
-                const token = newUser.tokenType + ' ' + newUser.idToken
+        //check prior to this
+        this.setState({ loading: true })
+        this.props.createUser({
+            email: this.state.email, 
+            password: this.state.password, 
+            username: this.state.username, 
+            address: this.state.address
+        }).then(({data: {createUser: {id}}}) => {
+            this.props.signinUser({ email: this.state.email, password: this.state.password})
+            .then(({data: {signinUser: {token}}}) => {
+                this.setState({ loading: false })
                 AsyncStorage.setItem('token', token)
 
-                this.props.navigation.navigate('Home')
+                this.props.navigation.navigate('Main', {id: id})
+                this.props.navigation.dispatch(NavigationActions.reset({index: 0}))
+                this.props.navigation.goBack(null)
 
-                AsyncStorage.getItem('yelp_token').then((result) => {
-                    if (result) {
+                AsyncStorage.getItem('yelp_token').then((yelp_token) => {
+                    if (yelp_token) {
                         console.log('token already exists')
                     } else {
                         const formData = new FormData()
@@ -75,16 +81,11 @@ export default class SignUp extends Component {
                     }
                 }).catch(err => console.warn(err))
             })
-            .catch((err) => { 
-                const errText = err.toString()
-                this.setState({ err: errText.substring(errText.indexOf(":") + 1) }) 
-            })
+        })
     }
     
-    // <Button title={'SIGN UP WITH FACEBOOK'} onPress={() => null} facebook/>
-
     render() {
-        return(
+        return (
             <KeyboardAvoidingView style={{backgroundColor: 'white', flex: 1}}>
                 <ScrollView style={{backgroundColor: 'white'}} contentContainerStyle={styles.center}>
                     <View style={[styles.container, {marginTop: 40}]}>
@@ -97,7 +98,6 @@ export default class SignUp extends Component {
                         <TextField label={'address'} value={this.state.address} highlightColor={'black'} editable={false}/>
                         <TouchableOpacity style={{width: '100%', marginTop: -50, height: 50}} onPress={() => this.openSearchModal()}/>
                         <TextField label={'username'} onChangeText={(text) => this.setState({username: text})} autoCapitalize={"none"} autoCorrect={false} value={this.state.username} highlightColor={'black'}/>
-                        <TextField label={'name'} onChangeText={(text) => this.setState({name: text})} value={this.state.name} highlightColor={'black'}/>
                     </View>
                     <View style={styles.container}>
                         <Text style={{color: 'red'}}>{this.state.err}</Text>
@@ -107,6 +107,7 @@ export default class SignUp extends Component {
                 <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={{paddingVertical: 20, paddingHorizontal: 15, position: 'absolute', top: 0, left: 0}}>
                     <Icon name={'ios-arrow-back'} color={'black'} size={32} />
                 </TouchableOpacity>
+                { this.state.loading && <Loading /> }
             </KeyboardAvoidingView>
         )
     }
@@ -128,3 +129,47 @@ export const styles = StyleSheet.create({
         resizeMode: 'contain'
     }
 })
+
+const CreateUserMutation = graphql(gql `
+    mutation CreateUserMutation($email: String!, $password: String!, $username: String!, $address: String!) {
+        createUser(
+            authProvider: {
+                email: {
+                    email: $email, 
+                    password: $password
+                }
+            }, 
+            username: $username, 
+            address: $address
+        ) {
+            id
+        }
+    }
+`, {
+    props: ({ mutate }) => ({
+        createUser: ({ email, password, username, address }) => mutate({
+            variables: { email, password, username, address }
+        })
+    })
+})
+
+const SignInMutation = graphql(gql `
+    mutation SignInMutation($email: String!, $password: String!) {
+        signinUser(
+            email: {
+                email: $email, 
+                password: $password
+            },
+        ) {
+            token
+        }
+    }
+`, {
+    props: ({ mutate }) => ({
+        signinUser: ({ email, password }) => mutate({
+            variables: { email, password }
+        })
+    })
+})
+
+export default compose(CreateUserMutation, SignInMutation)(SignUp)

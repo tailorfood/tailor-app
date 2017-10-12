@@ -3,11 +3,20 @@ import React, { Component } from 'react'
 import { View, Image, StyleSheet, Dimensions, AsyncStorage } from 'react-native'
 import Auth0 from 'react-native-auth0'
 import { NavigationActions } from 'react-navigation'
+import { gql, graphql, compose } from 'react-apollo'
 
-import { Button, Loading } from '../General'
-const keys = require('../../keys.json')
+import { Button, Loading } from './General'
 
-export default class Splash extends Component {
+const keys = require('../keys.json')
+
+const resetAction = NavigationActions.reset({
+    index: 0,
+    actions: [
+        NavigationActions.navigate({ routeName: 'Main' })
+    ]
+})
+
+class Splash extends Component {
     static navigationOptions = {
         title: 'Splash',
         header: () => null
@@ -15,7 +24,7 @@ export default class Splash extends Component {
 
     state = { loading: false, visible: false }
 
-    signInUser() {
+    signinUser() {
         setTimeout(() => this.setState({loading: true}), 1000)
         
         const auth0 = new Auth0({ domain: keys.AUTH_DOMAIN, clientId: keys.AUTH_ID })
@@ -24,25 +33,41 @@ export default class Splash extends Component {
             .then(credentials => {
                 __DEV__ && console.log(credentials)
                 const token = credentials.tokenType + ' ' + credentials.idToken
-                AsyncStorage.setItem('token', token) // might need to renew token at some point
-                this.props.navigation.navigate('Home')
-                this.setState({loading: false})
+
+                this.props.createUser({
+                    authId: credentials.idToken
+                }).then(({createUser: {id}}) => {
+                    AsyncStorage.setItem('token', token) // might need to renew token at some point
+                    this.props.navigation.navigate('SetupUser', { id: id })
+                    this.props.navigation.dispatch(NavigationActions.reset({index:0}))
+                    this.props.navigation.goBack(null)
+
+                    this.setState({loading: false})
+                }).catch((err) => {
+                    console.warn(err)
+                    this.props.signinUser({
+                        authId: credentials.idToken
+                    }).then(({signinUser: {user: {id}}}) => {
+                        AsyncStorage.setItem('token', token) // might need to renew token at some point
+                        this.props.navigation.navigate('Main', { id: id })
+                        this.props.navigation.dispatch(NavigationActions.reset({index:0}))
+                        this.props.navigation.goBack(null)
+
+                        this.setState({loading: false})
+                    })
+                })
+                
             })
             .catch(error => {
-                console.log(error)
+                console.warn(error)
                 this.setState({loading: false})
             })
     }
 
     componentWillMount() {
-        const resetAction = NavigationActions.reset({
-            index: 0,
-            actions: [
-                NavigationActions.navigate({ routeName: 'Main' })
-            ]
-        })
         AsyncStorage.getItem('token').then((token) => {
             if (token) {
+                //already logged in
                 this.props.navigation.dispatch(resetAction)
                 this.props.navigation.goBack(null)
 
@@ -82,9 +107,8 @@ export default class Splash extends Component {
     render() {
         return this.state.visible ? (
             <View style={styles.center}>
-                <Image style={styles.logo} source={require('../../images/tailor.png')}/>
-                <Button title={'SIGN IN'} onPress={() => this.signInUser()}/>
-                <Button title={'SIGN UP'} onPress={() => this.props.navigation.navigate('SignUp')}/>
+                <Image style={styles.logo} source={require('../images/tailor.png')}/>
+                <Button title={'SIGN IN / SIGN UP'} onPress={() => this.signinUser()}/>
                 { this.state.loading && <Loading/> }
             </View>
         ) : <View/>
@@ -104,3 +128,49 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     }
 })
+
+
+const CreateUserMutation = graphql(gql`
+    mutation CreateUserMutation($authId: String!) {
+        createUser(
+            authProvider: {
+                auth0: {
+                    idToken: $authId
+                }
+            }
+        ){  
+            id
+        }
+    }
+`, {
+    props: ({ mutate }) => ({
+        createUser: ({ authId }) => mutate({
+            variables: { authId },
+            options: { fetchPolicy: 'network-only' }
+        })
+    })
+})
+
+const signinUserMutation = graphql(gql`
+    mutation signinUserMutation($authId: String!) {
+        signinUser(
+            auth0: {
+                idToken: $authId
+            }
+        ){  
+            user {
+                id
+            }
+        }
+    }
+`, {
+    props: ({ mutate }) => ({
+        signinUser: ({ authId }) => mutate({
+            variables: { authId },
+            options: { fetchPolicy: 'network-only' }
+        })
+    })
+})
+
+
+export default compose(CreateUserMutation, signinUserMutation)(Splash)

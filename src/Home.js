@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { WideItem } from './ListItem'
+import { Loading } from './General'
 
 const fakeData = require('./fake_data.json')
 
@@ -33,11 +34,19 @@ export default class Home extends Component {
     }
 
     render() {
+        if (!this.props.user || this.props.user.loading) {
+            return <Loading />
+        }
+
+        const {
+            address
+        } = this.props.user
+
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
                     <View style={styles.subheader}>
-                        <Text style={styles.headertext}>{fakeData.profile.address.toUpperCase()}</Text>
+                        <Text style={styles.headertext}>{address.toUpperCase()}</Text>
                         <Icon name={'ios-arrow-down'} size={12} color={'rgba(0,0,0,0.8)'} style={{backgroundColor: 'transparent'}} onPress={() => this.dropDown()}/>
                     </View>
                 </View>

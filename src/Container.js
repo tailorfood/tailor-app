@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 export default class Container extends Component {
     state = {
-        index: 0,
+        index: this.props.index || 0,
         routes: [
             { key: '0', title: 'Home', icon: 'ios-home' },
             { key: '1', title: 'Explore', icon: 'ios-albums' },

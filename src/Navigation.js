@@ -1,28 +1,19 @@
 //@flow
-import React from 'react'
-import { connect } from 'react-redux'
-import { addNavigationHelpers, StackNavigator } from 'react-navigation'
+import { StackNavigator } from 'react-navigation'
 
-import Home from './Home'
-import Explore from './Explore'
-import Profile from './Profile'
 import Main from './Main'
-
 import Splash from './Splash'
-//import SignIn from '../SignIn'
-import SignUp from './SignUp'
+import SignInUser from './SignInUser'
+import SignUpUser from './SignUpUser'
 
 const navRoutes = {
-    Home: { screen: Home },
-    Explore: { screen: Explore },
-    Profile: { screen: Profile },
     Main: { screen: Main },
 }
 
 const routes = {
     Splash: { screen: Splash },
-    //SignIn: { screen: SignIn },
-    SignUp: { screen: SignUp },
+    SignIn: { screen: SignInUser },
+    SignUp: { screen: SignUpUser },
     Restaurant: { screen: () => null },
     Cuisine: { screen: () => null },
     ...navRoutes
