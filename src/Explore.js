@@ -12,7 +12,6 @@ import { createApolloFetch } from 'apollo-fetch'
 import { SquareItem } from './ListItem'
 import { Loading } from './General'
 
-const fakeData = require('./fake_data.json')
 const keys = require('../keys.json')
 
 const uri = 'https://api.yelp.com/v3/graphql'
@@ -31,9 +30,9 @@ export default class Explore extends Component {
 
     componentWillMount() {
         AsyncStorage.getItem('yelp_token').then(token => {
+            console.log(token)
             if (token) {
                 this.setState({ACCESS_TOKEN : token})
-                this.searchYelp('').then((res) => res && res.search && res.search.business && this.setState({searchData: res.search.business}))
             } else {
                 const formData = new FormData()
                 formData.append("grant_type", "client_credentials")
@@ -51,11 +50,6 @@ export default class Explore extends Component {
                 .then(res => {
                     AsyncStorage.setItem('yelp_token', res.access_token)
                     this.setState({ACCESS_TOKEN: res.access_token})
-                    .then(() => this.searchYelp('').then((search_res) => 
-                        search_res && 
-                        search_res.search && 
-                        search_res.search.business && 
-                        this.setState({searchData: res.search.business})))
                 })
             }
         }).catch(err => console.warn(err))
@@ -74,25 +68,27 @@ export default class Explore extends Component {
                 next()
             })
         }
+        (this.state.ACCESS_TOKEN || 
+            nextState.ACCESS_TOKEN) && 
+                this.searchSubmit()
+                console.log(this.state.searchData)
     }
 
     queryYelp = (query) => {
         return apolloFetch({ query }).then(({data}) => data)
     }
 
-    onTextChange = (text) => {
-        this.setState({search: text})
-        // https://www.yelp.com/developers/graphql/objects/business
-        this.searchYelp(text).then((res) => 
+    searchSubmit = () => {
+        this.searchYelp(this.state.search, this.props.user.address).then((res) => 
             res && 
             res.search && 
             res.search.business && 
             this.setState({searchData: res.search.business}))
     }
 
-    searchYelp = (text) => this.queryYelp(`
+    searchYelp = (text, area) => this.queryYelp(`
         query {
-            search(term: "${text}", location: "${fakeData.profile.address}", categories: "(food, All)", limit: 20) {
+            search(term: "${text}", location: "${area}", categories: "food", limit: 20) {
                 total
                 business {
                     name
@@ -132,11 +128,12 @@ export default class Explore extends Component {
                         <ScrollView style={{backgroundColor: 'white'}}>
                             <View style={{marginTop: -10, paddingHorizontal: 20, paddingBottom: 20}}>
                                 <TextField 
-                                    label={'search for cuisines or restaurants'} 
-                                    onChangeText={this.onTextChange} 
+                                    label={'search'} 
+                                    onChangeText={(text) => this.setState({search: text})} 
                                     value={this.state.search} 
                                     autoCorrect={false} 
                                     highlightColor={'black'} 
+                                    onSubmitEditing={this.searchSubmit}
                                 />
                             </View>
                             <FlatList 

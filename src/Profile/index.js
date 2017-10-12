@@ -3,7 +3,6 @@ import { ScrollView, View,  AsyncStorage } from 'react-native'
 
 import { Button, Loading } from '../General'
 import ProfileHeader from './ProfileHeader'
-const fakeData = require('../fake_data.json')
 
 export default class Profile extends Component {
     static navigationOptions = {
@@ -11,10 +10,6 @@ export default class Profile extends Component {
     }
 
     render() {
-        if (!this.props.user || this.props.user.loading) {
-            return <Loading />
-        }
-        
         const {
             address,
             username
