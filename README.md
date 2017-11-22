@@ -25,6 +25,7 @@ We use Linear Regression with Matrix Factoriation to detect your favourite bites
 - [Foodora](https://foodora.ca) (when that happens) (CAN/EU) [SCRAPE]
 - [Doordash](https://doordash.com) (CAN+) [SCRAPE]
 
+The non-API providing services are scraped using [nightmare](https://github.com/segmentio/nightmare)
 ### Other
 
 - [Google] (https://developers.google.com/places/web-service/details)
